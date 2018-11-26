@@ -22,21 +22,37 @@ def bellman(m):#e.g.:m(4,3) action(-1,0).
   probability=1.0/cnt  
   return probability,s
 
+def get_point(s):
+	temp=s//30
+	a=temp//6
+	b=temp%6
+	temp=s%30
+	c=temp//6
+	d=temp%6
+	return a,b,c,d	
+def get_state(a,b,s):
+	return 30*(6a+b)+6*s[0]+s[1]
 def reward(T, state):
+	probability=0
+	s=[]
 	if T==Max_T:
 		if state==900:# state fail
 			u[T,state]=0
+			return 0
 		elif (state>=840) and (state!=840+24+4):
 			u[T,state]=1
+			return 1
 	else:
 		if state==900:
 			u[T,state]=0
+			return 0
 		elif state==901:
 			u[T,state]=1
+			return 1
 		else:
-			temp=state%30
-			c=temp//6
-			d=temp%6
-			bellman(m)
+			a,b,c,d=get_point(state)
+			probability,s=bellman([c,d])
+			for i in range(len(s)):
+				u[T,state]+=probability*u[T+1,get_state(a,b,s[i])]
 			
 		
