@@ -78,7 +78,6 @@ def reward(T, state, action):
 				temp_result=0
 				for j in range(len(s)):
 					temp_result+=probability*reward(T+1,get_state(a,b,s[j]),possible_move[i])
-					print 'T= ',T,'j= ',j,'a,b,c,d= ',a,b,c,d,'temp_result= ',temp_result		
 				if temp_result>=best_result:
 					best_result=temp_result
 					best_action=possible_move[i]
