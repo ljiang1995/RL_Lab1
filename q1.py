@@ -1,5 +1,5 @@
 import numpy as np
-Max_T=10
+Max_T=15
 u=np.zeros((Max_T+1,902))
 available_choice=4
 moves=[[-1, 0],[1,0], [0,1], [0,-1], [0, 0]]
@@ -75,36 +75,46 @@ def reward(T, state,action):
 			u[T,state]=1
 			return 1
 		else:
+			if (a==4 and b==4) and (state!=868):
+				
+				return 1
+			elif (a==c) and (b==d):
+				return 0 
 			a+=action[0]
 			b+=action[1]
-			if (a==4 and b==4) and (state!=868):
-				return 1
-			elif (a==4 and b==4) and (state==868):
-				return 0
 			probability,s=bellman([c,d])
 			possible_move=player_move(state)
 			
 			temp_result=0
 			for j in range(len(s)):
-					temp_result+=probability*u[T+1,get_state(a,b,s[j])]
-			u[T,state]=temp_result
-			return u[T,state]
+					temp_result+=1.0*probability*u[T+1,get_state(a,b,s[j])]
+	
+			return temp_result
 
 T=Max_T
 for state in range(902):
 	u[T,state]=reward(T,state,[0,0])
-	print ('u[',T,',',state,']=',u[T,state])
 for i in reversed(range(Max_T)):
 	for state in range(902):
-		possible_move=player_move(state)
-		temp_reward=0
-		best_reward=0
-		for j in range(len(possible_move)):
-			temp_reward=reward(i,state,possible_move[j])
-			if temp_reward>=best_reward:
-				best_reward=temp_reward
+		if state==901:
+			u[i,state]=1
+		elif state==900:
+			u[i,state]=0
+		else:
+			a,b,c,d=get_point(state)
+			if a==b and c==d:
+				u[i,state]=u[i+1,900]
+			else:
+				possible_move=player_move(state)
+				temp_reward=0
+				best_reward=0
+				for j in range(len(possible_move)):
+					temp_reward=reward(i,state,possible_move[j])
+					if temp_reward>=best_reward:
+						best_reward=temp_reward
 				
-		u[i,state]=best_reward
-		print ('u[',i,',',state,']=',u[i,state])
-
+				u[i,state]=best_reward
+		
+		
+print (u[14,892],get_point(892))
 
