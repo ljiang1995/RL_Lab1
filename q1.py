@@ -152,7 +152,8 @@ if 1==1:
 			
 	T.append(Max_T)
 	possibility.append(u[0,28])
-
+#plt.plot(T, possibility)
+#plt.show()
 #success=0
 #for i in range(10000):
 #	if simulation(Max_T,best_policy)==901:
