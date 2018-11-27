@@ -1,19 +1,19 @@
 import numpy as np
 Max_T=15
 u=np.zeros((Max_T+1,902))
-available_choice=4
+available_choice=5
 moves=[[-1, 0],[1,0], [0,1], [0,-1], [0, 0]]
 moves1=[1, 3, 4, 5, 7, 9, 11, 13, 15, 17, 19, 20, 21, 22, 23, 25, 26, 27, 29]
 moves2=[0, 2, 3, 4, 6, 8, 10, 12, 14, 16, 18, 19, 20, 21, 22, 24, 25, 26, 28]
-moves4=[6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 18, 19, 20, 21, 22, 23, 24, 29]
 moves3=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14, 15, 16, 17, 18, 23]
+moves4=[6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 18, 19, 20, 21, 22, 23, 24, 29]
 moves5=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
 numsList=[]
 def bellman(m):#e.g.:m(4,3) 
   cnt=0
   s=[]
   numsList=[]
-  for row in range(4):
+  for row in range(available_choice):
         numsList.append([])
         for column in range(2):
           num =0
@@ -75,11 +75,6 @@ def reward(T, state,action):
 			u[T,state]=1
 			return 1
 		else:
-			if (a==4 and b==4) and (state!=868):
-				
-				return 1
-			elif (a==c) and (b==d):
-				return 0 
 			a+=action[0]
 			b+=action[1]
 			probability,s=bellman([c,d])
@@ -102,8 +97,10 @@ for i in reversed(range(Max_T)):
 			u[i,state]=0
 		else:
 			a,b,c,d=get_point(state)
-			if a==b and c==d:
+			if a==c and b==d:
 				u[i,state]=u[i+1,900]
+			elif (a==4 and b==4) and (state!=868):
+				u[i,state]=u[i+1,901]
 			else:
 				possible_move=player_move(state)
 				temp_reward=0
@@ -116,5 +113,5 @@ for i in reversed(range(Max_T)):
 				u[i,state]=best_reward
 		
 		
-print (u[14,892],get_point(892))
+print (u[0,28],get_point(28))
 
