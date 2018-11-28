@@ -9,18 +9,17 @@ robber=[0,0] #[a,b]
 police=[3,3] #[c,d]
 state=0
 
-def get_possible_directions(state):
+def get_possible_directions(x,y):
     directions=[]
-    a,b,c,d=get_point(state)
-    n=4*b+a
-    if not(n in no_left):
-        directions.append([-1,0])
-    if not(n in no_right):
-        directions.append([1,0])
-    if not(n in no_up):
-        directions.append([0,-1])
-    if not(n in no_down):
-        directions.append([0,1])
+    n=4*y+x
+    if not(nr in no_left):
+        directions=[].append([-1,0])
+    if not(nr in no_right):
+        directions=[].append([1,0])
+    if not(nr in no_up):
+        directions=[].append([0,-1])
+    if not(nr in no_down):
+        directions=[].append([0,1])
     return directions
 
 def get_point(state):
@@ -47,7 +46,7 @@ def robber_move(state,action):
         #how to move
 
     else:
-        directions=get_possible_directions(state)
+        directions=get_possible_directions(c,d)
         #police move
         for i in range(4):
             c_temp=c+directions[i][0]
@@ -59,3 +58,8 @@ def robber_move(state,action):
             r=1
     state=get_state(a,b,c,d)
     return state,r
+    
+#for i in range(4): #test
+    state=robber_move(state)
+    print(robber)
+    print(state)
