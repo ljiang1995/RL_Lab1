@@ -7,18 +7,17 @@ no_down=[12,13,14,15]
 bank=[1,1]
 robber=[0,0] #[a,b]
 police=[3,3] #[c,d]
-state=0
 
 def get_possible_directions(x,y):
     directions=[]
     n=4*y+x
-    if not(nr in no_left):
+    if not(n in no_left):
         directions=[].append([-1,0])
-    if not(nr in no_right):
+    if not(n in no_right):
         directions=[].append([1,0])
-    if not(nr in no_up):
+    if not(n in no_up):
         directions=[].append([0,-1])
-    if not(nr in no_down):
+    if not(n in no_down):
         directions=[].append([0,1])
     return directions
 
