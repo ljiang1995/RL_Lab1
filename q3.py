@@ -1,4 +1,6 @@
 import numpy as np
+import random
+import matplotlib.pyplot as plt
 
 no_left=[0,4,8,12]
 no_right=[3,7,11,15]
@@ -11,14 +13,15 @@ police=[3,3] #[c,d]
 def get_possible_directions(x,y):
     directions=[]
     n=4*y+x
+    directions.append([0,0])
     if not(n in no_left):
-        directions=[].append([-1,0])
+        directions.append([-1,0])
     if not(n in no_right):
-        directions=[].append([1,0])
+        directions.append([1,0])
     if not(n in no_up):
-        directions=[].append([0,-1])
+        directions.append([0,-1])
     if not(n in no_down):
-        directions=[].append([0,1])
+        directions.append([0,1])
     return directions
 
 def get_point(state):
@@ -34,30 +37,50 @@ def get_state(a,b,c,d):
     temp=(a+4*b)*16+c+4*d
     return temp
 
-def robber_move(state,action):
-    p=[] #probability  define later
+def get_probability(x,y):
+  m=[x,y]
+  cnt=0
+  s=[]
+  numsList=[]
+  for row in range(5):
+        numsList.append([])
+        for column in range(2):
+          num =0
+          numsList[row].append(num)
+  for i in range(5):
+      for j in range(2):
+   	    numsList[i][j]=m[j]
+   	    numsList[i][j]+=moves[i][j]
+      if (numsList[i][0] in range(4)) and (numsList[i][1] in range(4)):	
+      		s.append(numsList[i])
+      		cnt+=1
+  p=1.0/cnt  
+  return p,s
+
+
+
+def reward(state,action):
+    p=0  #probability  
     r=0  #reward
+    s=[]
     a,b,c,d=get_point(state)
     robber=[a,b]
     police=[c,d]
     if(robber==police):
-        r=-10
-        #how to move
-
-    else:
-        directions=get_possible_directions(c,d)
-        #police move
-        for i in range(4):
-            c_temp=c+directions[i][0]
-            d_temp=d+directions[i][1]
-            if(c_temp in range(4) and d_temp in range(4)):
-                state=get_state(a,b,c_temp,d_temp)
-
-        if(robber==bank):
-            r=1
+        r=r-10
+    if(robber==bank):
+        r=r+1
+    a=a+action[0]
+    b=b+action[1]
+    p,s=get_probability(c,d)
     state=get_state(a,b,c,d)
-    return state,r
+    return state,r,p
+
     
+
+
+
+
 #for i in range(4): #test
     state=robber_move(state)
     print(robber)
